@@ -31,6 +31,13 @@ vector<pair<char,int>> sortArray(string* str){
     return mainVec;
 }
 
+void printVector(const vector<pair<char, int>> &str) {
+    for(const auto & i : str)
+    {
+        cout << i.first << ", " << i.second << endl;
+    }
+}
+
 int main () {
     string myText;
     vector<pair<char,int>> str;
@@ -40,9 +47,6 @@ int main () {
     MyReadFile.close();
 
     str = sortArray(&myText);
-    for(int i = 0; i < str.size(); ++i)
-    {
-        cout << str[i].first << ", " << str[i].second << endl;
-    }
+    printVector(str);
     return 0;
 }
