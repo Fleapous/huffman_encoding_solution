@@ -14,7 +14,7 @@ vector<pair<char,int>> sortArray(string* str){
     vector<pair<char,int>> mainVec;
     vector<char> chechkVec;
     vector<char>::iterator it;
-    for (int i = 0; i < lenght; ++i) {
+    for (int i = 0; i < lenght - 1; ++i) {
         it = find(chechkVec.begin(), chechkVec.end(), char_array[i]);
         if (it != chechkVec.end()){
             ++mainVec[it - chechkVec.begin()].second;
@@ -91,49 +91,78 @@ void sorthHeap(struct hfHeap *arrH){
     sort(arrH->array.begin(), arrH->array.end(), sorFunc);
 }
 
+struct hfNode* extractNode(struct hfHeap *arrH){
+    struct hfNode *tmp = (struct hfNode *)malloc(sizeof(struct hfNode));
+    tmp->node = arrH->array.front().node;
+    tmp->left = arrH->array.front().left;
+    tmp->left = arrH->array.front().right;
+    arrH->array.erase(arrH->array.begin());
+    --arrH->size;
+    return tmp;
+}
+
+struct hfHeap* insertNode(struct hfNode *node, struct hfHeap *arrH){
+    arrH->array.push_back(*node);
+    ++arrH->size;
+}
+
 struct hfNode hfTree(vector<pair<char,int>>& arr, int size){
-    struct hfNode left, right, top;
+    struct hfNode *left, *right, *top;
     struct hfHeap *arrH = createHeap(arr,size);
     sorthHeap(arrH);
 
     while (isOne(arrH)){
+        left = extractNode(arrH);
+        right = extractNode(arrH);
 
+        pair<char, int> tmp;
+        tmp.first = '$';
+        tmp.second = left->node.second + right->node.second;
+        top = createNode(tmp);
+        top->left = left;
+        top->right = right;
+
+        insertNode(top, arrH);
+        sorthHeap(arrH);
     }
 
+    return *extractNode(arrH);
 }
 
 int main () {
-//    string myText;
-//    vector<pair<char,int>> str;
-//    ifstream MyReadFile("test.txt");
-//    getline(MyReadFile,myText);
-//    cout << myText << endl;
-//    MyReadFile.close();
-//
-//    str = sortArray(&myText);
-//    printVector(str);
+    string myText;
+    vector<pair<char,int>> str;
+    ifstream MyReadFile("test.txt");
+    getline(MyReadFile,myText);
+    cout << myText << endl;
+    MyReadFile.close();
+
+    str = sortArray(&myText);
+    printVector(str);
+    hfTree(str,str.size());
+    cout << "test" << endl;
 
 // testing code :>
-    pair<char,int> tm, tm2, tm3;
-    tm.second = 3;
-    tm.first = 's';
-    tm2.second = 5;
-    tm2.first = 'r';
-    tm3.second = 6;
-    tm3.first = 'a';
-    struct hfNode *node, *node1, *node2;
-    node = createNode(tm);
-    node1 = createNode(tm2);
-    node2 = createNode(tm3);
-    cout << node->node.first << " " << node->node.second << endl;
-    vector<pair<char,int>> p;
-    p.push_back(tm);
-    p.push_back(tm2);
-    p.push_back(tm3);
-    struct hfHeap *h = createHeap(p,3);
-    sorthHeap(h);
-    for (int i = 0; i < 3; ++i) {
-        cout << h->array[i].node.second << endl;
-    }
+//    pair<char,int> tm, tm2, tm3;
+//    tm.second = 3;
+//    tm.first = 's';
+//    tm2.second = 5;
+//    tm2.first = 'r';
+//    tm3.second = 6;
+//    tm3.first = 'a';
+//    struct hfNode *node, *node1, *node2;
+//    node = createNode(tm);
+//    node1 = createNode(tm2);
+//    node2 = createNode(tm3);
+//    cout << node->node.first << " " << node->node.second << endl;
+//    vector<pair<char,int>> p;
+//    p.push_back(tm);
+//    p.push_back(tm2);
+//    p.push_back(tm3);
+//    struct hfHeap *h = createHeap(p,3);
+//    sorthHeap(h);
+//    for (int i = 0; i < 3; ++i) {
+//        cout << h->array[i].node.second << endl;
+//    }
     return 0;
 }
