@@ -72,10 +72,6 @@ struct hfHeap *createHeap(vector<pair<char,int>>& arr, int size){
     return arrH;
 }
 
-void sortHfHeap(struct hfHeap *arrH){
-    //ll sort vector in arrH
-}
-
 bool isOne(struct hfHeap *arrH){
     if(arrH->size == 1)
         return false;
@@ -83,12 +79,26 @@ bool isOne(struct hfHeap *arrH){
         return true;
 }
 
+bool sorFunc (hfNode i, hfNode j) {
+    if (i.node.second < j.node.second)
+        return true;
+    else
+        return false;
+}
+
+void sorthHeap(struct hfHeap *arrH){
+    //ll sort vector in arrH
+    sort(arrH->array.begin(), arrH->array.end(), sorFunc);
+}
+
 struct hfNode hfTree(vector<pair<char,int>>& arr, int size){
     struct hfNode left, right, top;
+    struct hfHeap *arrH = createHeap(arr,size);
+    sorthHeap(arrH);
 
-    sortHfHeap(arr);
+    while (isOne(arrH)){
 
-    while (!isOne(arr))
+    }
 
 }
 
@@ -103,11 +113,27 @@ int main () {
 //    str = sortArray(&myText);
 //    printVector(str);
 
-    pair<char,int> tm;
+// testing code :>
+    pair<char,int> tm, tm2, tm3;
     tm.second = 3;
     tm.first = 's';
-    struct hfNode *node;
+    tm2.second = 5;
+    tm2.first = 'r';
+    tm3.second = 6;
+    tm3.first = 'a';
+    struct hfNode *node, *node1, *node2;
     node = createNode(tm);
+    node1 = createNode(tm2);
+    node2 = createNode(tm3);
     cout << node->node.first << " " << node->node.second << endl;
+    vector<pair<char,int>> p;
+    p.push_back(tm);
+    p.push_back(tm2);
+    p.push_back(tm3);
+    struct hfHeap *h = createHeap(p,3);
+    sorthHeap(h);
+    for (int i = 0; i < 3; ++i) {
+        cout << h->array[i].node.second << endl;
+    }
     return 0;
 }
