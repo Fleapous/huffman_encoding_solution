@@ -13,6 +13,7 @@ using namespace std;
 //}
 
 static bool encodingFound = false;
+static char decodingFound;
 
 vector<pair<char,int>> sortArray(string* str){
     int n = str->length();
@@ -162,11 +163,27 @@ vector<char> encodingTraverse(const struct hfNode *alg, char key, vector<char> &
         return savedEncoded;
 }
 
-void encode(const char* arr, int size, const struct hfNode *alg){
+void decodedTraverse(vector<char>& encodedArr, const struct hfNode *alg){
+    encodedArr.erase(encodedArr.begin());
+    if (alg->node.first != '$') {
+        decodingFound = alg->node.first;
+        return;
+//        decodingFound = true;
+    } else if (encodedArr.front() == '0'){
+        decodedTraverse(encodedArr, alg->left);
+        return;
+    } else if (encodedArr.front() == '1'){
+        decodedTraverse(encodedArr, alg->right);
+        return;
+    }
+    cout << "decodedTraverser error it maneged to got out of if statements" << endl;
+    return;
+}
+
+void encode(char* arr, int size, const struct hfNode *alg){
     vector<char> encoded;
 //    encodingTraverse(alg, 'd', encoded);
     for (int i = 0; i < size - 1; ++i) {
-
         encoded.push_back(encodingTraverse(alg, arr[i], encoded)[i]);
     }
     cout << "your message: ";
@@ -175,6 +192,28 @@ void encode(const char* arr, int size, const struct hfNode *alg){
     }
     cout << "\tencoded version: ";
     for (char i : encoded) {
+        cout << i;
+    }
+    cout << endl;
+}
+
+void decode(vector<char>& arr, const struct hfNode *alg){
+    vector<char> decoded;
+    vector<char> arrC = arr;
+    while(!arr.empty()){
+        arr.insert(arr.begin(), '0');
+        decodedTraverse(arr, alg);
+        decoded.push_back(decodingFound);
+        decodingFound = '$';
+    }
+
+    cout << endl;
+    cout << "enctripted message: ";
+    for (char i : arrC) {
+        cout << i;
+    }
+    cout << "\tdecripted message: ";
+    for (char i : decoded) {
         cout << i;
     }
     cout << endl;
@@ -200,9 +239,16 @@ void encodeDecode(const struct hfNode *alg){
             encode(charArr, size, alg);
 
         }else if (select == 'D'){
+            string message;
+            cout << "type the encripted message" << endl;
+            cin >> message;
+
+            vector<char> messageVec(message.begin(), message.end());
+
+            decode(messageVec, alg);
 
         }else if (select != 'E' && select != 'D'){
-            cout << "miss input!! mis input!!! " << endl;
+            cout << "miss input!! miss input!!! " << endl;
         }
         cout << "wanna quit? Type Q if you do :>" << endl;
         cin >> quits;
