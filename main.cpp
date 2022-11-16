@@ -38,15 +38,76 @@ void printVector(const vector<pair<char, int>> &str) {
     }
 }
 
-int main () {
-    string myText;
-    vector<pair<char,int>> str;
-    ifstream MyReadFile("test.txt");
-    getline(MyReadFile,myText);
-    cout << myText << endl;
-    MyReadFile.close();
+//huffman encoding thing
 
-    str = sortArray(&myText);
-    printVector(str);
+struct hfNode{
+    pair<char, int> node;
+    hfNode *left;
+    hfNode *right;
+};
+
+struct hfHeap{
+    vector<hfNode> array;
+    unsigned size;
+    unsigned capacity;
+};
+
+struct hfNode *createNode(pair<char,int>& node){
+    struct hfNode *tmp = (struct hfNode *)malloc(sizeof(struct hfNode));
+    tmp->node = node;
+    tmp->left = NULL;
+    tmp->right = NULL;
+    return tmp;
+}
+
+struct hfHeap *createHeap(vector<pair<char,int>>& arr, int size){
+    //will return a hfHEap
+    struct hfHeap *arrH = (struct hfHeap *) malloc(sizeof(struct hfHeap));
+    arrH->size = 0;
+    arrH->capacity = size;
+    for (int i = 0; i < size; ++i) {
+        struct hfNode *tmp = createNode(arr[i]);
+        arrH->array.push_back(*tmp);
+    }
+    return arrH;
+}
+
+void sortHfHeap(struct hfHeap *arrH){
+    //ll sort vector in arrH
+}
+
+bool isOne(struct hfHeap *arrH){
+    if(arrH->size == 1)
+        return false;
+    else
+        return true;
+}
+
+struct hfNode hfTree(vector<pair<char,int>>& arr, int size){
+    struct hfNode left, right, top;
+
+    sortHfHeap(arr);
+
+    while (!isOne(arr))
+
+}
+
+int main () {
+//    string myText;
+//    vector<pair<char,int>> str;
+//    ifstream MyReadFile("test.txt");
+//    getline(MyReadFile,myText);
+//    cout << myText << endl;
+//    MyReadFile.close();
+//
+//    str = sortArray(&myText);
+//    printVector(str);
+
+    pair<char,int> tm;
+    tm.second = 3;
+    tm.first = 's';
+    struct hfNode *node;
+    node = createNode(tm);
+    cout << node->node.first << " " << node->node.second << endl;
     return 0;
 }
