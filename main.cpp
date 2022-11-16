@@ -63,8 +63,7 @@ struct hfNode *createNode(pair<char,int>& node){
 struct hfHeap *createHeap(vector<pair<char,int>>& arr, int size){
     //will return a hfHEap
     struct hfHeap *arrH = (struct hfHeap *) malloc(sizeof(struct hfHeap));
-    arrH->size = 0;
-    arrH->capacity = size;
+    arrH->size = size;
     for (int i = 0; i < size; ++i) {
         struct hfNode *tmp = createNode(arr[i]);
         arrH->array.push_back(*tmp);
@@ -95,7 +94,7 @@ struct hfNode* extractNode(struct hfHeap *arrH){
     struct hfNode *tmp = (struct hfNode *)malloc(sizeof(struct hfNode));
     tmp->node = arrH->array.front().node;
     tmp->left = arrH->array.front().left;
-    tmp->left = arrH->array.front().right;
+    tmp->right = arrH->array.front().right;
     arrH->array.erase(arrH->array.begin());
     --arrH->size;
     return tmp;
