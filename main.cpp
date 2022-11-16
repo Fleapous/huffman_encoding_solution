@@ -5,6 +5,15 @@
 #include <iterator>
 using namespace std;
 
+//char* strToCA(string *str){
+//    int n = str->length();
+//    char *tmp = (char *)malloc((n + 1) * sizeof(char));
+//    strcpy(tmp, str->c_str());
+//    return tmp;
+//}
+
+static bool encodingFound = false;
+
 vector<pair<char,int>> sortArray(string* str){
     int n = str->length();
     char char_array[n + 1];
@@ -105,7 +114,7 @@ struct hfHeap* insertNode(struct hfNode *node, struct hfHeap *arrH){
     ++arrH->size;
 }
 
-struct hfNode hfTree(vector<pair<char,int>>& arr, int size){
+struct hfNode* hfTree(vector<pair<char,int>>& arr, int size){
     struct hfNode *left, *right, *top;
     struct hfHeap *arrH = createHeap(arr,size);
     sorthHeap(arrH);
@@ -125,23 +134,105 @@ struct hfNode hfTree(vector<pair<char,int>>& arr, int size){
         sorthHeap(arrH);
     }
 
-    return *extractNode(arrH);
+    return extractNode(arrH);
 }
 
-int main () {
+vector<char> encodingTraverse(const struct hfNode *alg, char key, vector<char> &encoded){
+    vector<char> savedEncoded = encoded;
+    if (alg->node.first == key){
+        encodingFound = true;
+        return encoded;
+    }
+    if (alg->left != NULL){
+        encoded.push_back('0');
+        encodingTraverse(alg->left, key, encoded);
+        if (encodingFound)
+            return encoded;
+    }
+    if (alg->right != NULL){
+        encoded.pop_back();
+        encoded.push_back('1');
+        encodingTraverse(alg->right, key, encoded);
+        if (encodingFound)
+            return encoded;
+    }
+    if (encodingFound)
+        return encoded;
+    else
+        return savedEncoded;
+}
+
+void encode(const char* arr, int size, const struct hfNode *alg){
+    vector<char> encoded;
+//    encodingTraverse(alg, 'd', encoded);
+    for (int i = 0; i < size - 1; ++i) {
+
+        encoded.push_back(encodingTraverse(alg, arr[i], encoded)[i]);
+    }
+    cout << "your message: ";
+    for (int i = 0; i < size - 1; ++i) {
+        cout << arr[i];
+    }
+    cout << "\tencoded version: ";
+    for (char i : encoded) {
+        cout << i;
+    }
+    cout << endl;
+}
+
+void encodeDecode(const struct hfNode *alg){
+    char quits = '$';
+    while(quits != 'Q'){
+        char select = '$';
+        cout << "what do you want to do?" << endl;
+        cout << "type E for encoding and D for decoding :>" << endl;
+        cin >> select;
+        if (select == 'E'){
+            string message;
+            cout << "type the message you want to encode." << endl;
+
+            cin >> message;
+            int n = message.length();
+            char charArr[n + 1];
+            strcpy(charArr, message.c_str());
+            int size = sizeof(charArr)/sizeof(char);
+
+            encode(charArr, size, alg);
+
+        }else if (select == 'D'){
+
+        }else if (select != 'E' && select != 'D'){
+            cout << "miss input!! mis input!!! " << endl;
+        }
+        cout << "wanna quit? Type Q if you do :>" << endl;
+        cin >> quits;
+
+
+    }
+}
+
+void tmpWrapper() {
     string myText;
     vector<pair<char,int>> str;
     ifstream MyReadFile("test.txt");
+
     getline(MyReadFile,myText);
     cout << myText << endl;
     MyReadFile.close();
 
     str = sortArray(&myText);
     printVector(str);
-    hfTree(str,str.size());
-    cout << "test" << endl;
+    struct hfNode root = *hfTree(str, str.size());
 
-// testing code :>
+    encodeDecode(&root);
+    cout << "test" << endl;
+}
+
+
+
+int main () {
+    tmpWrapper();
+    // testing code :>
 //    pair<char,int> tm, tm2, tm3;
 //    tm.second = 3;
 //    tm.first = 's';
@@ -165,3 +256,5 @@ int main () {
 //    }
     return 0;
 }
+
+
