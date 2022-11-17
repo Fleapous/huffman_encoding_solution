@@ -185,6 +185,7 @@ void encode(char* arr, int size, const struct hfNode *alg){
 //    encodingTraverse(alg, 'd', encoded);
     for (int i = 0; i < size - 1; ++i) {
         encoded.push_back(encodingTraverse(alg, arr[i], encoded)[i]);
+        encodingFound = false;
     }
     cout << "your message: ";
     for (int i = 0; i < size - 1; ++i) {
