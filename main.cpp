@@ -5,13 +5,6 @@
 #include <iterator>
 using namespace std;
 
-//char* strToCA(string *str){
-//    int n = str->length();
-//    char *tmp = (char *)malloc((n + 1) * sizeof(char));
-//    strcpy(tmp, str->c_str());
-//    return tmp;
-//}
-
 static bool encodingFound = false;
 static char decodingFound;
 
@@ -151,7 +144,7 @@ vector<char> encodingTraverse(const struct hfNode *alg, char key, vector<char> &
             return encoded;
     }
     if (alg->right != NULL){
-        encoded.pop_back();
+        encoded = savedEncoded;
         encoded.push_back('1');
         encodingTraverse(alg->right, key, encoded);
         if (encodingFound)
@@ -278,32 +271,8 @@ void tmpWrapper() {
     cout << "test" << endl;
 }
 
-
-
 int main () {
     tmpWrapper();
-    // testing code :>
-//    pair<char,int> tm, tm2, tm3;
-//    tm.second = 3;
-//    tm.first = 's';
-//    tm2.second = 5;
-//    tm2.first = 'r';
-//    tm3.second = 6;
-//    tm3.first = 'a';
-//    struct hfNode *node, *node1, *node2;
-//    node = createNode(tm);
-//    node1 = createNode(tm2);
-//    node2 = createNode(tm3);
-//    cout << node->node.first << " " << node->node.second << endl;
-//    vector<pair<char,int>> p;
-//    p.push_back(tm);
-//    p.push_back(tm2);
-//    p.push_back(tm3);
-//    struct hfHeap *h = createHeap(p,3);
-//    sorthHeap(h);
-//    for (int i = 0; i < 3; ++i) {
-//        cout << h->array[i].node.second << endl;
-//    }
     return 0;
 }
 
