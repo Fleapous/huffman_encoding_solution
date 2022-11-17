@@ -181,10 +181,13 @@ void decodedTraverse(vector<char>& encodedArr, const struct hfNode *alg){
 }
 
 void encode(char* arr, int size, const struct hfNode *alg){
-    vector<char> encoded;
+    vector<char> res;
 //    encodingTraverse(alg, 'd', encoded);
     for (int i = 0; i < size - 1; ++i) {
-        encoded.push_back(encodingTraverse(alg, arr[i], encoded)[i]);
+        vector<char> tmp;
+        vector<char> encoded;
+        tmp = encodingTraverse(alg, arr[i], encoded);
+        res.insert(res.end(), tmp.begin(), tmp.end());
         encodingFound = false;
     }
     cout << "your message: ";
@@ -192,7 +195,7 @@ void encode(char* arr, int size, const struct hfNode *alg){
         cout << arr[i];
     }
     cout << "\tencoded version: ";
-    for (char i : encoded) {
+    for (char i : res) {
         cout << i;
     }
     cout << endl;
